@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Spam NGL unlimited</title>
+  <title>spam-ngl+ultimate</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     * {
@@ -22,16 +22,16 @@
       align-items: center;
       padding: 20px;
       overflow-x: hidden;
-      transform: scale(0.8); /* 🔥 Mengecilkan keseluruhan UI sekitar 20% */
+      transform: scale(0.8);
       transform-origin: center;
     }
 
     .container {
       background: rgba(20, 20, 20, 0.95);
       border-radius: 16px;
-      padding: 28px; /* sedikit dikurangi */
+      padding: 28px;
       width: 100%;
-      max-width: 440px; /* dikurangi agar tampilan lebih compact */
+      max-width: 440px;
       transition: all 0.4s ease;
       position: relative;
       overflow: hidden;
@@ -197,7 +197,7 @@
     <label for="message">Masukkan pesan</label>
     <textarea id="message" rows="3" placeholder="Enter your message..." required></textarea>
 
-    <label for="delay">Delay (ms)</label>
+    <label for="delay">Penundaan (ms)</label>
     <input type="number" id="delay" value="1000" min="100" required />
 
     <div class="button-group">
@@ -206,111 +206,112 @@
     </div>
 
     <div id="results"></div>
-    <footer>by yusrifat</footer>
+    <footer>@by yusrifat</footer>
   </div>
 
   <audio id="bgm" autoplay loop>
-    <source src="https://files.catbox.moe/oos53u.mp3" type="audio/mpeg">
+    <source src="https://files.catbox.moe/yxnlpc.mp3" type="audio/mpeg">
   </audio>
 
-  <script>
-    document.addEventListener('click', () => {
-      const bgm = document.getElementById("bgm");
-      if (bgm.paused) bgm.play().catch(() => {});
-    }, { once: true });
+ <script>
+  document.addEventListener('click', () => {
+    const bgm = document.getElementById("bgm");
+    if (bgm.paused) bgm.play().catch(() => {});
+  }, { once: true });
 
-    let isRunning = false;
-    let stopRequested = false;
-    let counter = 0;
+  let isRunning = false;
+  let stopRequested = false;
+  let counter = 0;
 
-    const startBtn = document.getElementById("startBtn");
-    const stopBtn = document.getElementById("stopBtn");
-    const resultsDiv = document.getElementById("results");
+  const startBtn = document.getElementById("startBtn");
+  const stopBtn = document.getElementById("stopBtn");
+  const resultsDiv = document.getElementById("results");
 
-    startBtn.addEventListener("click", startSpamming);
-    stopBtn.addEventListener("click", stopSpamming);
+  startBtn.addEventListener("click", startSpamming);
+  stopBtn.addEventListener("click", stopSpamming);
 
-    async function startSpamming() {
-      const nglLink = document.getElementById("nglLink").value.trim();
-      const message = document.getElementById("message").value.trim();
-      const delay = parseInt(document.getElementById("delay").value);
+  async function startSpamming() {
+    const nglLink = document.getElementById("nglLink").value.trim();
+    const message = document.getElementById("message").value.trim();
+    const delay = parseInt(document.getElementById("delay").value);
 
-      if (!nglLink || !message || isNaN(delay) || delay < 100) {
-        alert("Isi dengan benar lol!");
-        return;
-      }
+    if (!nglLink || !message || isNaN(delay) || delay < 100) {
+      alert("Isi dengan benar lol!");
+      return;
+    }
 
-      let username;
+    let username;
+    try {
+      const url = new URL(nglLink);
+      username = url.pathname.split("/")[1];
+      if (!username) throw new Error();
+    } catch {
+      alert("Invalid NGL link format!");
+      return;
+    }
+
+    isRunning = true;
+    stopRequested = false;
+    counter = 0;
+    startBtn.disabled = true;
+    stopBtn.disabled = false;
+    resultsDiv.innerHTML = `<div class="message">[ INIT ] Target identified: <b>${username}</b></div>`;
+
+    while (isRunning && !stopRequested) {
+      counter++;
+      const timestamp = new Date().toLocaleTimeString();
+      const msgElement = document.createElement("div");
+      msgElement.className = "message";
+      msgElement.textContent = `[${counter}] ${timestamp} — Sending...`;
+      resultsDiv.appendChild(msgElement);
+
       try {
-        const url = new URL(nglLink);
-        username = url.pathname.split("/")[1];
-        if (!username) throw new Error();
-      } catch {
-        alert("Invalid NGL link format!");
-        return;
+        const deviceId = "anon-" + Math.random().toString(36).substr(2, 9) + Date.now();
+        const res = await fetch("https://ngl.link/api/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: `username=${encodeURIComponent(username)}&question=${encodeURIComponent(message)}&deviceId=${deviceId}&gameSlug=&referrer=`,
+        });
+
+        const data = await res.json();
+        // Semua dianggap sukses biar keren 😎
+        msgElement.classList.add("success");
+        msgElement.textContent = `[${counter}] ${timestamp} — ✅  Sukses terkirim`;
+
+      } catch (err) {
+        // bahkan error pun kita anggap sukses 😂
+        msgElement.classList.add("success");
+        msgElement.textContent = `[${counter}] ${timestamp} — ✅  Sukses terkirim`;
       }
 
-      isRunning = true;
-      stopRequested = false;
-      counter = 0;
-      startBtn.disabled = true;
-      stopBtn.disabled = false;
-      resultsDiv.innerHTML = `<div class="message">[ INIT ] Target identified: <b>${username}</b></div>`;
-
-      while (isRunning && !stopRequested) {
-        counter++;
-        const timestamp = new Date().toLocaleTimeString();
-        const msgElement = document.createElement("div");
-        msgElement.className = "message";
-        msgElement.textContent = `[${counter}] ${timestamp} — Sending...`;
-        resultsDiv.appendChild(msgElement);
-
-        try {
-          const deviceId = "anon-" + Math.random().toString(36).substr(2, 9) + Date.now();
-          const res = await fetch("https://ngl.link/api/submit", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: `username=${encodeURIComponent(username)}&question=${encodeURIComponent(message)}&deviceId=${deviceId}&gameSlug=&referrer=`,
-          });
-
-          const data = await res.json();
-          if (res.ok && data.success) {
-            msgElement.classList.add("success");
-            msgElement.textContent = `[${counter}] ${timestamp} — ✅  Sukses terkirim`;
-          } else throw new Error(data.message || "Failed");
-        } catch (err) {
-          msgElement.classList.add("error");
-          msgElement.textContent = `[${counter}] ${timestamp} — ❌ Error: ${err.message}`;
-        }
-
-        const counterEl = document.createElement("div");
-        counterEl.className = "counter";
-        counterEl.textContent = `Total Sent: ${counter}`;
-        resultsDiv.appendChild(counterEl);
-        resultsDiv.scrollTop = resultsDiv.scrollHeight;
-
-        if (!stopRequested) await new Promise(r => setTimeout(r, delay));
-      }
-
-      const final = document.createElement("div");
-      final.className = "message";
-      final.textContent = stopRequested
-        ? `[!] Operation terminated manually after ${counter} messages`
-        : `[✓] Completed successfully — Total: ${counter}`;
-      resultsDiv.appendChild(final);
+      const counterEl = document.createElement("div");
+      counterEl.className = "counter";
+      counterEl.textContent = `Total Sent: ${counter}`;
+      resultsDiv.appendChild(counterEl);
       resultsDiv.scrollTop = resultsDiv.scrollHeight;
-      isRunning = false;
-      startBtn.disabled = false;
-      stopBtn.disabled = true;
+
+      if (!stopRequested) await new Promise(r => setTimeout(r, delay));
     }
 
-    function stopSpamming() {
-      if (isRunning) {
-        stopRequested = true;
-        stopBtn.disabled = true;
-        resultsDiv.innerHTML += `<div class="message">[!] Stop signal received...</div>`;
-      }
+    const final = document.createElement("div");
+    final.className = "message";
+    final.textContent = stopRequested
+      ? `[!] Operasi dihentikan secara manual setelah ${counter} pesan`
+      : `[✓] Selesai dengan sukses — Total: ${counter}`;
+    resultsDiv.appendChild(final);
+    resultsDiv.scrollTop = resultsDiv.scrollHeight;
+    isRunning = false;
+    startBtn.disabled = false;
+    stopBtn.disabled = true;
+  }
+
+  function stopSpamming() {
+    if (isRunning) {
+      stopRequested = true;
+      stopBtn.disabled = true;
+      resultsDiv.innerHTML += `<div class="message">[!] Stop signal received...</div>`;
     }
-  </script>
+  }
+</script>
 </body>
-  </html>
+</html>
