@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spam NGL unlimited</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #0a0a0a 0%, #000 100%);
+      color: #e5e5e5;
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+      transform: scale(0.8); /* 🔥 Mengecilkan keseluruhan UI sekitar 20% */
+      transform-origin: center;
+    }
+
+    .container {
+      background: rgba(20, 20, 20, 0.95);
+      border-radius: 16px;
+      padding: 28px; /* sedikit dikurangi */
+      width: 100%;
+      max-width: 440px; /* dikurangi agar tampilan lebih compact */
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .container::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      animation: rotate 6s linear infinite;
+      opacity: 0.08;
+      z-index: 0;
+    }
+
+    @keyframes rotate {
+      100% { transform: rotate(360deg); }
+    }
+
+    .container * {
+      position: relative;
+      z-index: 2;
+    }
+
+    h1 {
+      text-align: center;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 800;
+      font-size: 1.4rem; /* sedikit lebih kecil */
+      background: linear-gradient(90deg, #00ffcc, #00bfff, #ff33cc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px rgba(0,255,255,0.25);
+      letter-spacing: 0.8px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      color: #b3fff0;
+      margin-bottom: 5px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 9px;
+      border: 1px solid rgba(0,255,180,0.3);
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.5);
+      color: #e5e5e5;
+      font-size: 0.85rem;
+      outline: none;
+      margin-bottom: 12px;
+      transition: 0.3s;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #00ffcc;
+      box-shadow: 0 0 8px rgba(0,255,255,0.25);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #fff;
+      background: linear-gradient(90deg, #00bcd4, #00ff99);
+      transition: 0.3s;
+      font-family: 'Poppins', sans-serif;
+      letter-spacing: 0.5px;
+      font-size: 0.85rem;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 12px rgba(0,255,255,0.4);
+    }
+
+    #stopBtn {
+      background: linear-gradient(90deg, #ff0040, #ff6600);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    #results {
+      margin-top: 20px;
+      max-height: 240px;
+      overflow-y: auto;
+      padding-right: 4px;
+      font-size: 0.8rem;
+    }
+
+    .message {
+      padding: 8px;
+      margin-bottom: 6px;
+      border-radius: 5px;
+      background: rgba(255,255,255,0.05);
+      border-left: 3px solid #00ffaa;
+      transition: 0.3s;
+    }
+
+    .success {
+      border-left-color: #00ffcc;
+      color: #b3ffe2;
+    }
+
+    .error {
+      border-left-color: #ff3b6b;
+      color: #ffb6c1;
+    }
+
+    .counter {
+      text-align: center;
+      color: #00ffcc;
+      font-size: 0.7rem;
+      margin-top: 5px;
+      opacity: 0.8;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.7rem;
+      color: #00ffd5;
+      margin-top: 10px;
+      opacity: 0.6;
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(#00ffc6, #00bfff);
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>SPAM NGL</h1>
+
+    <label for="nglLink">Masukkan link target</label>
+    <input type="url" id="nglLink" placeholder="https://ngl.link/username" required />
+
+    <label for="message">Masukkan pesan</label>
+    <textarea id="message" rows="3" placeholder="Enter your message..." required></textarea>
+
+    <label for="delay">Delay (ms)</label>
+    <input type="number" id="delay" value="1000" min="100" required />
+
+    <div class="button-group">
+      <button id="startBtn">START</button>
+      <button id="stopBtn" disabled>STOP</button>
+    </div>
+
+    <div id="results"></div>
+    <footer>by yusrifat</footer>
+  </div>
+
+  <audio id="bgm" autoplay loop>
+    <source src="https://files.catbox.moe/oos53u.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    document.addEventListener('click', () => {
+      const bgm = document.getElementById("bgm");
+      if (bgm.paused) bgm.play().catch(() => {});
+    }, { once: true });
+
+    let isRunning = false;
+    let stopRequested = false;
+    let counter = 0;
+
+    const startBtn = document.getElementById("startBtn");
+    const stopBtn = document.getElementById("stopBtn");
+    const resultsDiv = document.getElementById("results");
+
+    startBtn.addEventListener("click", startSpamming);
+    stopBtn.addEventListener("click", stopSpamming);
+
+    async function startSpamming() {
+      const nglLink = document.getElementById("nglLink").value.trim();
+      const message = document.getElementById("message").value.trim();
+      const delay = parseInt(document.getElementById("delay").value);
+
+      if (!nglLink || !message || isNaN(delay) || delay < 100) {
+        alert("Isi dengan benar lol!");
+        return;
+      }
+
+      let username;
+      try {
+        const url = new URL(nglLink);
+        username = url.pathname.split("/")[1];
+        if (!username) throw new Error();
+      } catch {
+        alert("Invalid NGL link format!");
+        return;
+      }
+
+      isRunning = true;
+      stopRequested = false;
+      counter = 0;
+      startBtn.disabled = true;
+      stopBtn.disabled = false;
+      resultsDiv.innerHTML = `<div class="message">[ INIT ] Target identified: <b>${username}</b></div>`;
+
+      while (isRunning && !stopRequested) {
+        counter++;
+        const timestamp = new Date().toLocaleTimeString();
+        const msgElement = document.createElement("div");
+        msgElement.className = "message";
+        msgElement.textContent = `[${counter}] ${timestamp} — Sending...`;
+        resultsDiv.appendChild(msgElement);
+
+        try {
+          const deviceId = "anon-" + Math.random().toString(36).substr(2, 9) + Date.now();
+          const res = await fetch("https://ngl.link/api/submit", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `username=${encodeURIComponent(username)}&question=${encodeURIComponent(message)}&deviceId=${deviceId}&gameSlug=&referrer=`,
+          });
+
+          const data = await res.json();
+          if (res.ok && data.success) {
+            msgElement.classList.add("success");
+            msgElement.textContent = `[${counter}] ${timestamp} — ✅  Sukses terkirim`;
+          } else throw new Error(data.message || "Failed");
+        } catch (err) {
+          msgElement.classList.add("error");
+          msgElement.textContent = `[${counter}] ${timestamp} — ❌ Error: ${err.message}`;
+        }
+
+        const counterEl = document.createElement("div");
+        counterEl.className = "counter";
+        counterEl.textContent = `Total Sent: ${counter}`;
+        resultsDiv.appendChild(counterEl);
+        resultsDiv.scrollTop = resultsDiv.scrollHeight;
+
+        if (!stopRequested) await new Promise(r => setTimeout(r, delay));
+      }
+
+      const final = document.createElement("div");
+      final.className = "message";
+      final.textContent = stopRequested
+        ? `[!] Operation terminated manually after ${counter} messages`
+        : `[✓] Completed successfully — Total: ${counter}`;
+      resultsDiv.appendChild(final);
+      resultsDiv.scrollTop = resultsDiv.scrollHeight;
+      isRunning = false;
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+    }
+
+    function stopSpamming() {
+      if (isRunning) {
+        stopRequested = true;
+        stopBtn.disabled = true;
+        resultsDiv.innerHTML += `<div class="message">[!] Stop signal received...</div>`;
+      }
+    }
+  </script>
+</body>
+  </html>
