@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -24,43 +24,8 @@
       overflow-x: hidden;
       transform: scale(0.8);
       transform-origin: center;
-      perspective: 1200px;
     }
 
-    .hologram-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      z-index: -1;
-      background: radial-gradient(circle, rgba(0,255,255,0.08) 0%, transparent 80%);
-      animation: rotate3D 25s linear infinite;
-      transform-style: preserve-3d;
-    }
-
-    .hologram-particle {
-      position: absolute;
-      width: 3px;
-      height: 3px;
-      background: rgba(0,255,255,0.8);
-      border-radius: 50%;
-      box-shadow: 0 0 6px rgba(0,255,255,0.6);
-      animation: float 8s ease-in-out infinite;
-    }
-
-    @keyframes rotate3D {
-      0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
-      100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
-    }
-
-    @keyframes float {
-      0%,100% { transform: translateY(0px) scale(1); opacity: 0.8; }
-      50% { transform: translateY(-20px) scale(1.4); opacity: 1; }
-    }
-
-    /* === ORIGINAL STYLE (tidak diubah) === */
     .container {
       background: rgba(20, 20, 20, 0.95);
       border-radius: 16px;
@@ -97,7 +62,7 @@
       text-align: center;
       font-family: 'Orbitron', sans-serif;
       font-weight: 800;
-      font-size: 1.4rem;
+      font-size: 1.4rem; /* sedikit lebih kecil */
       background: linear-gradient(90deg, #00ffcc, #00bfff, #ff33cc);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -223,10 +188,6 @@
   </style>
 </head>
 <body>
-
-  <!-- 🔹 HOLOGRAM 3D BACKGROUND -->
-  <div class="hologram-bg" id="holo"></div>
-
   <div class="container">
     <h1>SPAM NGL</h1>
 
@@ -257,18 +218,6 @@
     const bgm = document.getElementById("bgm");
     if (bgm.paused) bgm.play().catch(() => {});
   }, { once: true });
-
-  // === HOLOGRAM PARTICLES ===
-  const holo = document.getElementById("holo");
-  for (let i = 0; i < 80; i++) {
-    const p = document.createElement("div");
-    p.classList.add("hologram-particle");
-    p.style.left = Math.random() * 100 + "%";
-    p.style.top = Math.random() * 100 + "%";
-    p.style.animationDelay = (Math.random() * 8) + "s";
-    p.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
-    holo.appendChild(p);
-  }
 
   let isRunning = false;
   let stopRequested = false;
