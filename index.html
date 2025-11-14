@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -46,52 +46,79 @@
     h1 {
       text-align: center;
       font-family: 'Orbitron', sans-serif;
-      font-weight: 800;
-      font-size: 1.4rem;
+      font-weight: 900;
+      font-size: 1.3rem;
       background: linear-gradient(90deg, #00ffcc, #00bfff, #ff33cc);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 20px;
-      text-shadow: 0 0 10px rgba(0,255,255,0.25);
       letter-spacing: 0.8px;
     }
-    label { display: block; font-size: 0.8rem; color: #b3fff0; margin-bottom: 5px; font-weight: 500; letter-spacing: 0.3px; }
+    label { display: block; font-size: 0.8rem; color: #ffffffcc; margin-bottom: 5px; font-weight: 500; letter-spacing: 0.3px; }
     input, textarea {
-      width: 100%; padding: 9px; border: 1px solid rgba(0,255,180,0.3);
-      border-radius: 6px; background: rgba(0,0,0,0.5); color: #e5e5e5;
+      width: 100%; padding: 9px; border: 2px solid #ffffff;
+      border-radius: 6px; background: rgba(0,0,0,0.5); color: #ffffff;
       font-size: 0.85rem; outline: none; margin-bottom: 12px; transition: 0.3s;
+      font-weight: 700; /* input semua tebal */
     }
-    input:focus, textarea:focus { border-color: #00ffcc; box-shadow: 0 0 8px rgba(0,255,255,0.25); }
+    input:focus, textarea:focus { border-color: #ffffff; box-shadow: 0 0 10px #ffffff80; }
     .button-group { display: flex; gap: 8px; margin-top: 8px; }
     button {
       flex: 1; padding: 10px; border: none; border-radius: 6px; font-weight: 600;
       cursor: pointer; color: #fff; background: linear-gradient(90deg, #00bcd4, #00ff99);
       transition: 0.3s; font-family: 'Poppins', sans-serif; letter-spacing: 0.5px; font-size: 0.85rem;
     }
-    button:hover { transform: translateY(-2px); box-shadow: 0 0 12px rgba(0,255,255,0.4); }
+    button:hover { transform: translateY(-2px); box-shadow: 0 0 12px rgba(255,255,255,0.4); }
     #stopBtn { background: linear-gradient(90deg, #ff0040, #ff6600); }
     button:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; transform: none; }
     #results { margin-top: 20px; max-height: 240px; overflow-y: auto; padding-right: 4px; font-size: 0.8rem; }
-    .message { padding: 8px; margin-bottom: 6px; border-radius: 5px; background: rgba(255,255,255,0.05); border-left: 3px solid #00ffaa; transition: 0.3s; }
-    .success { border-left-color: #00ffcc; color: #b3ffe2; }
+
+    /* ===== Semua message border default gradien biru→ungu ===== */
+    .message {
+      padding: 8px; margin-bottom: 6px; border-radius: 5px;
+      background: rgba(255,255,255,0.05);
+      border-left: 4px solid;
+      border-image: linear-gradient(90deg, #4a00e0, #8e2de2) 1;
+      transition: all 0.4s ease; color: #ffffff;
+      font-weight: 700; /* semua teks tebal */
+    }
+
+    .message.clicked { box-shadow: 0 0 10px rgba(138,43,226,0.7); }
+
+    .success {
+      border-left: 4px solid #00ff00; /* border hijau */
+      color: #00ff00; /* teks hijau */
+    }
+
+    .success .number { color: #8e2de2; } /* nomor tetap ungu */
+    .success .time { color: #ffffff; } /* waktu putih */
+
+    .sending .number { color: #8e2de2; } /* nomor ungu saat mengirim */
+    .sending .text { color: #ff0000; } /* teks Mengirim merah */
+    .sending .time { color: #ffffff; } /* waktu putih saat mengirim */
+
+    .stop-signal { color: #ff0000; font-weight: 700; } /* stop merah */
+    .manual-stop { color: #ff0000; font-weight: 700; } /* operasi dihentikan merah, tanpa nomor */
+
     .error { border-left-color: #ff3b6b; color: #ffb6c1; }
-    .counter { text-align: center; color: #00ffcc; font-size: 0.7rem; margin-top: 5px; opacity: 0.8; }
-    footer { text-align: center; font-size: 0.7rem; color: #00ffd5; margin-top: 10px; opacity: 0.6; }
+
+    .counter { text-align: center; color: #ffffff; font-size: 0.7rem; margin-top: 5px; opacity: 0.8; }
+    footer { text-align: center; font-size: 0.7rem; color: #ffffffaa; margin-top: 10px; opacity: 0.6; }
     ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-thumb { background: linear-gradient(#00ffc6, #00bfff); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(#ffffff, #ffffff); border-radius: 3px; }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>SPAM NGL</h1>
+    <h1>SPAM NGL ULTIMATE</h1>
 
     <label for="nglLink">Masukkan link target</label>
     <input type="url" id="nglLink" placeholder="https://ngl.link/username" required />
 
     <label for="message">Masukkan pesan</label>
-    <textarea id="message" rows="3" placeholder="Enter your message..." required></textarea>
+    <textarea id="message" rows="3" placeholder="Masukkan pesan anda..." required></textarea>
 
-    <label for="delay">Penundaan (ms)</label>
+    <label for="delay">Penundaan 1000 > 1 detik</label>
     <input type="number" id="delay" value="1000" min="100" required />
 
     <div class="button-group">
@@ -100,7 +127,7 @@
     </div>
 
     <div id="results"></div>
-    <footer>@by yusrifat</footer>
+    <footer>@created by yusrifat</footer>
   </div>
 
   <audio id="bgm" autoplay loop>
@@ -155,39 +182,50 @@
       counter++;
       const timestamp = new Date().toLocaleTimeString();
       const msgElement = document.createElement("div");
-      msgElement.className = "message";
-      msgElement.textContent = `[${counter}] ${timestamp} — Sending...`;
+      msgElement.className = "message sending";
+      msgElement.innerHTML = `<span class="number">[${counter}]</span> <span class="time">${timestamp}</span> <span class="text">— Mengirim...</span>`;
       resultsDiv.appendChild(msgElement);
+      resultsDiv.scrollTop = resultsDiv.scrollHeight;
 
       try {
         const deviceId = "anon-" + Math.random().toString(36).substr(2, 9) + Date.now();
-        const res = await fetch("https://ngl.link/api/submit", {
+        await fetch("https://ngl.link/api/submit", {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
           body: `username=${encodeURIComponent(username)}&question=${encodeURIComponent(message)}&deviceId=${deviceId}&gameSlug=&referrer=`,
         });
 
-        const data = await res.json();
+        msgElement.classList.remove("sending");
         msgElement.classList.add("success");
-        msgElement.textContent = `[${counter}] ${timestamp} — ✔  Sukses terkirim`;
+        msgElement.innerHTML = `<span class="number">[${counter}]</span> <span class="time">${timestamp}</span> ✔ Sukses terkirim`;
 
       } catch (err) {
+        msgElement.classList.remove("sending");
         msgElement.classList.add("success");
-        msgElement.textContent = `[${counter}] ${timestamp} — ✔  Sukses terkirim`;
+        msgElement.innerHTML = `<span class="number">[${counter}]</span> <span class="time">${timestamp}</span> ✔ Sukses terkirim`;
       }
 
-      resultsDiv.scrollTop = resultsDiv.scrollHeight;
+      await new Promise(r => setTimeout(r, delay));
+    }
 
-      if (!stopRequested) await new Promise(r => setTimeout(r, delay));
+    if (stopRequested) {
+      const stopMsg = document.createElement("div");
+      stopMsg.className = "message manual-stop";
+      stopMsg.textContent = `Operasi dihentikan secara manual`;
+      resultsDiv.appendChild(stopMsg);
+      resultsDiv.scrollTop = resultsDiv.scrollHeight;
     }
 
     const final = document.createElement("div");
-    final.className = "message";
-    final.textContent = stopRequested
-      ? `[!] Operasi dihentikan secara manual setelah ${counter} pesan`
-      : `[✓] Selesai dengan sukses — Total: ${counter}`;
-    resultsDiv.appendChild(final);
+    final.className = "message success";
+    final.innerHTML = `<span class="number">[${counter}]</span> ${
+      !stopRequested
+        ? `[✓] Selesai dengan sukses — Total: ${counter}`
+        : ''
+    }`;
+    if (!stopRequested) resultsDiv.appendChild(final);
     resultsDiv.scrollTop = resultsDiv.scrollHeight;
+
     isRunning = false;
     startBtn.disabled = false;
     stopBtn.disabled = true;
@@ -197,9 +235,14 @@
     if (isRunning) {
       stopRequested = true;
       stopBtn.disabled = true;
-      resultsDiv.innerHTML += `<div class="message">[!] Stop signal received...</div>`;
     }
   }
+
+  resultsDiv.addEventListener('click', (e) => {
+    if (e.target.classList.contains('message')) {
+      e.target.classList.add('clicked');
+    }
+  });
 </script>
 </body>
-  </html>
+</html>
