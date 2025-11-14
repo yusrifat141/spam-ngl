@@ -1,4 +1,4 @@
-<DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -81,27 +81,16 @@
       transition: all 0.4s ease; color: #ffffff;
       font-weight: 700;
     }
-
     .message.clicked { box-shadow: 0 0 10px rgba(138,43,226,0.7); }
-
-    .success {
-      border-left: 4px solid #00ff00;
-      color: #00ff00;
-    }
-
+    .success { border-left: 4px solid #00ff00; color: #00ff00; }
     .success .number { color: #8e2de2; }
     .success .time { color: #ffffff; }
-
     .sending .number { color: #8e2de2; }
     .sending .text { color: #ff0000; }
     .sending .time { color: #ffffff; }
-
     .stop-signal { color: #ff0000; font-weight: 700; }
     .manual-stop { color: #ff0000; font-weight: 700; }
-
     .error { border-left-color: #ff3b6b; color: #ffb6c1; }
-
-    .counter { text-align: center; color: #ffffff; font-size: 0.7rem; margin-top: 5px; opacity: 0.8; }
     footer { text-align: center; font-size: 0.7rem; color: #ffffffaa; margin-top: 10px; opacity: 0.6; }
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-thumb { background: linear-gradient(#ffffff, #ffffff); border-radius: 3px; }
@@ -112,10 +101,24 @@
     <h1>SPAM NGL ULTIMATE</h1>
 
     <label for="nglLink">Masukkan link target</label>
-    <input type="url" id="nglLink" placeholder="https://ngl.link/username" required />
+    <input type="url" id="nglLink" placeholder="Link nya harus ngl tidak boleh link lain" required />
 
     <label for="message">Masukkan pesan</label>
     <textarea id="message" rows="3" placeholder="Masukkan pesan anda..." required></textarea>
+
+    <label for="customName">Custom nama pengirim</label>
+    <div style="position: relative;">
+      <input type="text" id="customName" placeholder="Masukkan nama | atau kosong saja" value="" maxlength="5" style="padding-right:40px;" />
+      <span id="nameCounter" style="
+        position: absolute;
+        right: 10px;
+        top: 40%;
+        transform: translateY(-50%);
+        font-size: 0.8rem;
+        color: #fff;
+        pointer-events: none;
+      ">0/5</span>
+    </div>
 
     <label for="delay">Penundaan 1000 > 1 detik</label>
     <input type="number" id="delay" value="1000" min="100" required />
@@ -133,115 +136,132 @@
     <source src="https://files.catbox.moe/iljf1n.mp3" type="audio/mpeg">
   </audio>
 
- <script>
-  document.addEventListener('click', () => {
-    const bgm = document.getElementById("bgm");
-    if (bgm.paused) bgm.play().catch(() => {});
-  }, { once: true });
+  <script>
+    document.addEventListener('click', () => {
+      const bgm = document.getElementById("bgm");
+      if (bgm.paused) bgm.play().catch(() => {});
+    }, { once: true });
 
-  let isRunning = false;
-  let stopRequested = false;
-  let counter = 0;
+    let isRunning = false;
+    let stopRequested = false;
+    let counter = 0;
 
-  const startBtn = document.getElementById("startBtn");
-  const stopBtn = document.getElementById("stopBtn");
-  const resultsDiv = document.getElementById("results");
+    const startBtn = document.getElementById("startBtn");
+    const stopBtn = document.getElementById("stopBtn");
+    const resultsDiv = document.getElementById("results");
 
-  startBtn.addEventListener("click", startSpamming);
-  stopBtn.addEventListener("click", stopSpamming);
+    startBtn.addEventListener("click", startSpamming);
+    stopBtn.addEventListener("click", stopSpamming);
 
-  async function startSpamming() {
-    const nglLink = document.getElementById("nglLink").value.trim();
-    const message = document.getElementById("message").value.trim();
-    const delay = parseInt(document.getElementById("delay").value);
+    async function startSpamming() {
+      const nglLink = document.getElementById("nglLink").value.trim();
+      const message = document.getElementById("message").value.trim();
+      const customName = document.getElementById("customName").value.trim() || "anon";
+      const delay = parseInt(document.getElementById("delay").value);
 
-    if (!nglLink || !message || isNaN(delay) || delay < 100) {
-      alert("Isi dengan benar lol!");
-      return;
-    }
-
-    let username;
-    try {
-      const url = new URL(nglLink);
-      username = url.pathname.split("/")[1];
-      if (!username) throw new Error();
-    } catch {
-      alert("Invalid NGL link format!");
-      return;
-    }
-
-    isRunning = true;
-    stopRequested = false;
-    counter = 0;
-    startBtn.disabled = true;
-    stopBtn.disabled = false;
-    resultsDiv.innerHTML = `<div class="message">[ INIT ] Target identified: <b>${username}</b></div>`;
-
-    while (isRunning && !stopRequested) {
-      counter++;
-      const timestamp = new Date().toLocaleTimeString();
-      const msgElement = document.createElement("div");
-      msgElement.className = "message sending";
-      msgElement.innerHTML = `<span class="number">[${counter}]</span> <span class="time">${timestamp}</span> <span class="text">— Mengirim...</span>`;
-      resultsDiv.appendChild(msgElement);
-      resultsDiv.scrollTop = resultsDiv.scrollHeight;
-
-      try {
-        const deviceId = "anon-" + Math.random().toString(36).substr(2, 9) + Date.now();
-        await fetch("https://ngl.link/api/submit", {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: `username=${encodeURIComponent(username)}&question=${encodeURIComponent(message)}&deviceId=${deviceId}&gameSlug=&referrer=`,
-        });
-
-        msgElement.classList.remove("sending");
-        msgElement.classList.add("success");
-        msgElement.innerHTML = `<span class="number">[${counter}]</span> <span class="time">${timestamp}</span> ✔ Sukses terkirim`;
-
-      } catch (err) {
-        msgElement.classList.remove("sending");
-        msgElement.classList.add("success");
-        msgElement.innerHTML = `<span class="number">[${counter}]</span> <span class="time">${timestamp}</span> ✔ Sukses terkirim`;
+      // Validasi tetap jalan tapi popup sudah dihapus
+      if (!nglLink || !message || isNaN(delay) || delay < 100) {
+        console.log("Isi form tidak valid!");
+        return;
       }
 
-      await new Promise(r => setTimeout(r, delay));
-    }
+      let username;
+      try {
+        const url = new URL(nglLink);
+        username = url.pathname.split("/")[1];
+        if (!username) throw new Error();
+      } catch {
+        console.log("Link NGL tidak valid!");
+        return;
+      }
 
-    if (stopRequested) {
-      const stopMsg = document.createElement("div");
-      stopMsg.className = "message manual-stop";
-      stopMsg.textContent = `Operasi dihentikan secara manual`;
-      resultsDiv.appendChild(stopMsg);
+      isRunning = true;
+      stopRequested = false;
+      counter = 0;
+      startBtn.disabled = true;
+      stopBtn.disabled = false;
+      resultsDiv.innerHTML = `<div class="message">[ OKE ] Menargetkan: <b>${username}</b></div>`;
+
+      while (isRunning && !stopRequested) {
+        counter++;
+        const timestamp = new Date().toLocaleTimeString();
+        const msgElement = document.createElement("div");
+        msgElement.className = "message sending";
+        msgElement.innerHTML = `<span class="number">[${counter}]</span> <span class="time">${timestamp}</span> <span class="text">— Mengirim...</span>`;
+        resultsDiv.appendChild(msgElement);
+        resultsDiv.scrollTop = resultsDiv.scrollHeight;
+
+        try {
+          const randomId = Math.random().toString(36).substr(2, 9) + Date.now();
+          const deviceId = customName !== "anon" ? `${customName}-${randomId}` : `anon-${randomId}`;
+
+          await fetch("https://ngl.link/api/submit", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `username=${encodeURIComponent(username)}&question=${encodeURIComponent(message)}&deviceId=${deviceId}&gameSlug=&referrer=`,
+          });
+
+          msgElement.classList.remove("sending");
+          msgElement.classList.add("success");
+          msgElement.innerHTML = `<span class="number">[${counter}]</span> <span class="time">${timestamp}</span> ✔ Sukses terkirim`;
+
+        } catch (err) {
+          msgElement.classList.remove("sending");
+          msgElement.classList.add("success");
+          msgElement.innerHTML = `<span class="number">[${counter}]</span> <span class="time">${timestamp}</span> ✔ Sukses terkirim`;
+        }
+
+        await new Promise(r => setTimeout(r, delay));
+      }
+
+      if (stopRequested) {
+        const stopMsg = document.createElement("div");
+        stopMsg.className = "message manual-stop";
+        stopMsg.textContent = `Operasi dihentikan secara manual`;
+        resultsDiv.appendChild(stopMsg);
+        resultsDiv.scrollTop = resultsDiv.scrollHeight;
+      }
+
+      const final = document.createElement("div");
+      final.className = "message success";
+      final.innerHTML = `<span class="number">[${counter}]</span> ${
+        !stopRequested ? `[✓] Selesai dengan sukses — Total: ${counter}` : ''
+      }`;
+      if (!stopRequested) resultsDiv.appendChild(final);
       resultsDiv.scrollTop = resultsDiv.scrollHeight;
-    }
 
-    const final = document.createElement("div");
-    final.className = "message success";
-    final.innerHTML = `<span class="number">[${counter}]</span> ${
-      !stopRequested
-        ? `[✓] Selesai dengan sukses — Total: ${counter}`
-        : ''
-    }`;
-    if (!stopRequested) resultsDiv.appendChild(final);
-    resultsDiv.scrollTop = resultsDiv.scrollHeight;
-
-    isRunning = false;
-    startBtn.disabled = false;
-    stopBtn.disabled = true;
-  }
-
-  function stopSpamming() {
-    if (isRunning) {
-      stopRequested = true;
+      isRunning = false;
+      startBtn.disabled = false;
       stopBtn.disabled = true;
     }
-  }
 
-  resultsDiv.addEventListener('click', (e) => {
-    if (e.target.classList.contains('message')) {
-      e.target.classList.add('clicked');
+    function stopSpamming() {
+      if (isRunning) {
+        stopRequested = true;
+        stopBtn.disabled = true;
+      }
     }
-  });
-</script>
+
+    resultsDiv.addEventListener('click', (e) => {
+      if (e.target.classList.contains('message')) {
+        e.target.classList.add('clicked');
+      }
+    });
+
+    const customNameInput = document.getElementById('customName');
+    const nameCounter = document.getElementById('nameCounter');
+
+    customNameInput.addEventListener('input', () => {
+      const len = customNameInput.value.length;
+      nameCounter.textContent = `${len}/5`;
+      if(len > 5) {
+        nameCounter.style.color = 'red';
+        customNameInput.style.borderColor = 'red';
+      } else {
+        nameCounter.style.color = '#ffffff';
+        customNameInput.style.borderColor = '#ffffff';
+      }
+    });
+  </script>
 </body>
 </html>
