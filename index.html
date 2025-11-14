@@ -1,9 +1,12 @@
+/* Nyari apa dek? */
+/* Intip intip segala wkwkwk */
+
 <DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>spam-ngl+ultimate</title>
+  <title>spam-ngl-ultimate</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -59,7 +62,7 @@
       width: 100%; padding: 9px; border: 2px solid #ffffff;
       border-radius: 6px; background: rgba(0,0,0,0.5); color: #ffffff;
       font-size: 0.85rem; outline: none; margin-bottom: 12px; transition: 0.3s;
-      font-weight: 700; /* input semua tebal */
+      font-weight: 700;
     }
     input:focus, textarea:focus { border-color: #ffffff; box-shadow: 0 0 10px #ffffff80; }
     .button-group { display: flex; gap: 8px; margin-top: 8px; }
@@ -73,32 +76,31 @@
     button:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; transform: none; }
     #results { margin-top: 20px; max-height: 240px; overflow-y: auto; padding-right: 4px; font-size: 0.8rem; }
 
-    /* ===== Semua message border default gradien biru→ungu ===== */
     .message {
       padding: 8px; margin-bottom: 6px; border-radius: 5px;
       background: rgba(255,255,255,0.05);
       border-left: 4px solid;
       border-image: linear-gradient(90deg, #4a00e0, #8e2de2) 1;
       transition: all 0.4s ease; color: #ffffff;
-      font-weight: 700; /* semua teks tebal */
+      font-weight: 700;
     }
 
     .message.clicked { box-shadow: 0 0 10px rgba(138,43,226,0.7); }
 
     .success {
-      border-left: 4px solid #00ff00; /* border hijau */
-      color: #00ff00; /* teks hijau */
+      border-left: 4px solid #00ff00;
+      color: #00ff00;
     }
 
-    .success .number { color: #8e2de2; } /* nomor tetap ungu */
-    .success .time { color: #ffffff; } /* waktu putih */
+    .success .number { color: #8e2de2; }
+    .success .time { color: #ffffff; }
 
-    .sending .number { color: #8e2de2; } /* nomor ungu saat mengirim */
-    .sending .text { color: #ff0000; } /* teks Mengirim merah */
-    .sending .time { color: #ffffff; } /* waktu putih saat mengirim */
+    .sending .number { color: #8e2de2; }
+    .sending .text { color: #ff0000; }
+    .sending .time { color: #ffffff; }
 
-    .stop-signal { color: #ff0000; font-weight: 700; } /* stop merah */
-    .manual-stop { color: #ff0000; font-weight: 700; } /* operasi dihentikan merah, tanpa nomor */
+    .stop-signal { color: #ff0000; font-weight: 700; }
+    .manual-stop { color: #ff0000; font-weight: 700; }
 
     .error { border-left-color: #ff3b6b; color: #ffb6c1; }
 
